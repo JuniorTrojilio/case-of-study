@@ -1,0 +1,28 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Test
+
+# Controls when the workflow will run
+on: ['push', 'pull_request']
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  code: 
+    name: Test Code
+    runs-on: ubuntu-latest
+
+    # Check repository
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Run Jest
+        run: yarn test --coverage
+
