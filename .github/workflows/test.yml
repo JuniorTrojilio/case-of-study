@@ -28,3 +28,6 @@ jobs:
 
       - name: Run Jest
         run: yarn test --coverage --passWithNoTests
+
+      - name: Check linting
+      - run: yarn lint --fix
