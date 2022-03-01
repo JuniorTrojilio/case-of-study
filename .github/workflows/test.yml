@@ -7,7 +7,7 @@ on: ['push', 'pull_request']
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  code: 
+  code:
     name: Test Code
     runs-on: ubuntu-latest
 
@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: 16
 
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
       - name: Run Jest
         run: yarn test --coverage
-
