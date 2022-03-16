@@ -1,14 +1,5 @@
-import { HttpPostClient } from '../../protocols/http/httpPostClient'
+import HttpPostClientSpy from '../../mocks/httpPostClientSpy'
 import Authentication from './authentication'
-
-class HttpPostClientSpy implements HttpPostClient {
-	url?: string
-
-	async post(url: string): Promise<void> {
-		this.url = url
-		return Promise.resolve()
-	}
-}
 
 describe('Authentication', () => {
 	test('should call http clientwith correct url', () => {
