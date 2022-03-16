@@ -16,7 +16,7 @@ const makeSut = (url: string): SutTypes => {
 }
 
 describe('Authentication', () => {
-	test('should call http clientwith correct url', () => {
+	test('should call http clientwith correct URL', () => {
 		const url = 'any_url'
 		const { httpPostClientSpy, authenticationSut } = makeSut(url)
 		authenticationSut.auth()
