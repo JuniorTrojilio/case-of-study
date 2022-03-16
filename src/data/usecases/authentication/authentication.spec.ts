@@ -6,7 +6,7 @@ type SutTypes = {
 	httpPostClientSpy: HttpPostClientSpy
 }
 
-const makeSut = (url: string): SutTypes => {
+const makeSut = (url = 'any_url'): SutTypes => {
 	const httpPostClientSpy = new HttpPostClientSpy()
 	const authenticationSut = new Authentication(url, httpPostClientSpy)
 	return {
@@ -17,7 +17,7 @@ const makeSut = (url: string): SutTypes => {
 
 describe('Authentication', () => {
 	test('should call http clientwith correct URL', () => {
-		const url = 'any_url'
+		const url = 'other_url'
 		const { httpPostClientSpy, authenticationSut } = makeSut(url)
 		authenticationSut.auth()
 		expect(httpPostClientSpy.url).toBe(url)
