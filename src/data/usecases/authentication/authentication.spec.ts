@@ -1,5 +1,7 @@
+import InvalidCredentialsError from '../../../domain/errors/invalidCredentialsError'
 import { AuthenticationParams } from '../../../domain/usecases/authentication'
 import HttpPostClientSpy from '../../mocks/httpPostClientSpy'
+import { HttpStatusCode } from '../../protocols/http/httpResponseClient'
 import Authentication from './authentication'
 
 type SutTypes = {
@@ -36,5 +38,14 @@ describe('Authentication', () => {
 		const mockedBody = mockAuthenticationBody()
 		await authenticationSut.auth(mockedBody)
 		expect(httpPostClientSpy.body).toEqual(mockedBody)
+	})
+
+	test('should throw Invalid Credentials Error if httpPostClient returns 401', () => {
+		const { httpPostClientSpy, authenticationSut } = makeSut()
+		httpPostClientSpy.response = {
+			statusCode: HttpStatusCode.UNAUTHORIZED,
+		}
+		const promise = authenticationSut.auth(mockAuthenticationBody())
+		expect(promise).rejects.toThrow(new InvalidCredentialsError())
 	})
 })
