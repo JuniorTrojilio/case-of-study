@@ -1,3 +1,4 @@
+import { AuthenticationParams } from '../../../domain/usecases/authentication'
 import { HttpPostClient } from '../../protocols/http/httpPostClient'
 
 export default class Authentication {
@@ -9,7 +10,7 @@ export default class Authentication {
 		this.httpPostClient = httpPostClient
 	}
 
-	async auth(): Promise<void> {
-		await this.httpPostClient.post({ url: this.url })
+	async auth({ email, password }: AuthenticationParams): Promise<void> {
+		await this.httpPostClient.post({ url: this.url, body: { email, password } })
 	}
 }

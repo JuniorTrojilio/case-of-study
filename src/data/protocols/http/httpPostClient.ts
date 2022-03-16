@@ -1,6 +1,7 @@
 export type HttpPostType = {
 	url: string
+	body?: object
 }
 export interface HttpPostClient {
-	post({ url }: HttpPostType): Promise<void>
+	post({ url, body }: HttpPostType): Promise<void>
 }
