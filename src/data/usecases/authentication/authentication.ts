@@ -1,4 +1,5 @@
 import InvalidCredentialsError from '../../../domain/errors/invalidCredentialsError'
+import UnexpectedError from '../../../domain/errors/unexpectedError'
 import { AuthenticationParams } from '../../../domain/usecases/authentication'
 import { HttpPostClient } from '../../protocols/http/httpPostClient'
 import { HttpStatusCode } from '../../protocols/http/httpResponseClient'
@@ -13,15 +14,18 @@ export default class Authentication {
 	}
 
 	async auth({ email, password }: AuthenticationParams): Promise<void> {
-		const response = await this.httpPostClient.post({
+		const httpResponse = await this.httpPostClient.post({
 			url: this.url,
 			body: { email, password },
 		})
-		switch (response.statusCode) {
+
+		switch (httpResponse.statusCode) {
+			case HttpStatusCode.OK:
+				break
 			case HttpStatusCode.UNAUTHORIZED:
 				throw new InvalidCredentialsError()
 			default:
-				return Promise.resolve()
+				throw new UnexpectedError()
 		}
 	}
 }
