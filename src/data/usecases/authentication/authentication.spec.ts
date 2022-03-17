@@ -1,9 +1,9 @@
+import { HttpStatusCode } from '../../protocols/http/httpResponseClient'
 import { AccountModel } from '../../../domain/models/accountModel'
 import InvalidCredentialsError from '../../../domain/errors/invalidCredentialsError'
 import UnexpectedError from '../../../domain/errors/unexpectedError'
-import { AuthenticationParams } from '../../../domain/usecases/authentication'
+import { AuthenticationParams } from '../../../domain/usecases/authentication/authentication'
 import HttpPostClientSpy from '../../mocks/httpPostClientSpy'
-import { HttpStatusCode } from '../../protocols/http/httpResponseClient'
 import Authentication from './authentication'
 
 type SutTypes = {
@@ -27,6 +27,13 @@ const mockAuthenticationBody = (): AuthenticationParams => {
 	return {
 		email: 'any_email',
 		password: 'any_password',
+	}
+}
+
+const mockAccountModel = (): AccountModel => {
+	return {
+		accessToken: 'any_token',
+		refreshToken: 'any_refresh_token',
 	}
 }
 
@@ -79,5 +86,16 @@ describe('Authentication', () => {
 		}
 		const promise = authenticationSut.auth(mockAuthenticationBody())
 		await expect(promise).rejects.toThrowError(new UnexpectedError())
+	})
+
+	test('should return account model if httpPostClient returns 200 ', async () => {
+		const { httpPostClientSpy, authenticationSut } = makeSut()
+		const httpResponse = mockAccountModel()
+		httpPostClientSpy.response = {
+			statusCode: HttpStatusCode.OK,
+			body: httpResponse,
+		}
+		const account = await authenticationSut.auth(mockAuthenticationBody())
+		expect(account).toEqual(httpResponse)
 	})
 })
