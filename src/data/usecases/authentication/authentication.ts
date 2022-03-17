@@ -1,3 +1,4 @@
+import { AccountModel } from '../../../domain/models/accountModel'
 import InvalidCredentialsError from '../../../domain/errors/invalidCredentialsError'
 import UnexpectedError from '../../../domain/errors/unexpectedError'
 import { AuthenticationParams } from '../../../domain/usecases/authentication'
@@ -7,7 +8,10 @@ import { HttpStatusCode } from '../../protocols/http/httpResponseClient'
 export default class Authentication {
 	constructor(
 		private readonly url: string,
-		private readonly httpPostClient: HttpPostClient
+		private readonly httpPostClient: HttpPostClient<
+			AuthenticationParams,
+			AccountModel
+		>
 	) {
 		this.url = url
 		this.httpPostClient = httpPostClient

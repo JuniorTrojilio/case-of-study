@@ -18,7 +18,7 @@ export enum HttpStatusCode {
 	GATEWAY_TIMEOUT = 504,
 }
 
-export type HttpResponse = {
+export type HttpResponse<T> = {
 	statusCode: HttpStatusCode
-	body?: object
+	body?: T
 }
