@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-shadow
 export enum HttpStatusCode {
 	OK = 200,
 	CREATED = 201,
@@ -21,6 +20,5 @@ export enum HttpStatusCode {
 
 export type HttpResponse = {
 	statusCode: HttpStatusCode
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	body?: any
+	body?: object
 }
