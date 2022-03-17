@@ -1,4 +1,5 @@
 import InvalidCredentialsError from '../../../domain/errors/invalidCredentialsError'
+import UnexpectedError from '../../../domain/errors/unexpectedError'
 import { AuthenticationParams } from '../../../domain/usecases/authentication'
 import HttpPostClientSpy from '../../mocks/httpPostClientSpy'
 import { HttpStatusCode } from '../../protocols/http/httpResponseClient'
@@ -40,12 +41,39 @@ describe('Authentication', () => {
 		expect(httpPostClientSpy.body).toEqual(mockedBody)
 	})
 
-	test('should throw Invalid Credentials Error if httpPostClient returns 401', () => {
+	test('should throw Invalid Credentials Error if httpPostClient returns 401', async () => {
 		const { httpPostClientSpy, authenticationSut } = makeSut()
 		httpPostClientSpy.response = {
 			statusCode: HttpStatusCode.UNAUTHORIZED,
 		}
 		const promise = authenticationSut.auth(mockAuthenticationBody())
-		expect(promise).rejects.toThrow(new InvalidCredentialsError())
+		await expect(promise).rejects.toThrowError(new InvalidCredentialsError())
+	})
+
+	test('should throw Unexpected Error if httpPostClient returns 400 ', async () => {
+		const { httpPostClientSpy, authenticationSut } = makeSut()
+		httpPostClientSpy.response = {
+			statusCode: HttpStatusCode.BAD_REQUEST,
+		}
+		const promise = authenticationSut.auth(mockAuthenticationBody())
+		await expect(promise).rejects.toThrowError(new UnexpectedError())
+	})
+
+	test('should throw Unexpected Error if httpPostClient returns 404 ', async () => {
+		const { httpPostClientSpy, authenticationSut } = makeSut()
+		httpPostClientSpy.response = {
+			statusCode: HttpStatusCode.NOT_FOUND,
+		}
+		const promise = authenticationSut.auth(mockAuthenticationBody())
+		await expect(promise).rejects.toThrowError(new UnexpectedError())
+	})
+
+	test('should throw Unexpected Error if httpPostClient returns 500 ', async () => {
+		const { httpPostClientSpy, authenticationSut } = makeSut()
+		httpPostClientSpy.response = {
+			statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+		}
+		const promise = authenticationSut.auth(mockAuthenticationBody())
+		await expect(promise).rejects.toThrowError(new UnexpectedError())
 	})
 })
