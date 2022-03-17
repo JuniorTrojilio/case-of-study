@@ -1,3 +1,4 @@
+import { AccountModel } from '../../../domain/models/accountModel'
 import InvalidCredentialsError from '../../../domain/errors/invalidCredentialsError'
 import UnexpectedError from '../../../domain/errors/unexpectedError'
 import { AuthenticationParams } from '../../../domain/usecases/authentication'
@@ -7,11 +8,14 @@ import Authentication from './authentication'
 
 type SutTypes = {
 	authenticationSut: Authentication
-	httpPostClientSpy: HttpPostClientSpy
+	httpPostClientSpy: HttpPostClientSpy<AuthenticationParams, AccountModel>
 }
 
 const makeSut = (url = 'any_url'): SutTypes => {
-	const httpPostClientSpy = new HttpPostClientSpy()
+	const httpPostClientSpy = new HttpPostClientSpy<
+		AuthenticationParams,
+		AccountModel
+	>()
 	const authenticationSut = new Authentication(url, httpPostClientSpy)
 	return {
 		authenticationSut,
@@ -41,7 +45,7 @@ describe('Authentication', () => {
 		expect(httpPostClientSpy.body).toEqual(mockedBody)
 	})
 
-	test('should throw Invalid Credentials Error if httpPostClient returns 401', async () => {
+	test('should throw Invalid Credentials on httpPostClient returns 401', async () => {
 		const { httpPostClientSpy, authenticationSut } = makeSut()
 		httpPostClientSpy.response = {
 			statusCode: HttpStatusCode.UNAUTHORIZED,
