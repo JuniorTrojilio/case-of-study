@@ -24,10 +24,10 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-      - run: yarn
+        run: yarn
 
       - name: Run Jest
-      - run: yarn test --coverage --passWithNoTests
+        run: yarn test --coverage --passWithNoTests
 
       - name: Check linting
-      - run: yarn lint-staged
+        run: yarn lint-staged
