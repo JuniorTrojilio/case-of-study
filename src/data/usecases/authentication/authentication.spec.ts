@@ -5,6 +5,7 @@ import UnexpectedError from '../../../domain/errors/unexpectedError'
 import { AuthenticationParams } from '../../../domain/usecases/authentication/authentication'
 import HttpPostClientSpy from '../../mocks/httpPostClientSpy'
 import Authentication from './authentication'
+import { mockAccountModel, mockAuthenticationBody } from '../../mocks/shared'
 
 type SutTypes = {
 	authenticationSut: Authentication
@@ -20,20 +21,6 @@ const makeSut = (url = 'any_url'): SutTypes => {
 	return {
 		authenticationSut,
 		httpPostClientSpy,
-	}
-}
-
-const mockAuthenticationBody = (): AuthenticationParams => {
-	return {
-		email: 'any_email',
-		password: 'any_password',
-	}
-}
-
-const mockAccountModel = (): AccountModel => {
-	return {
-		accessToken: 'any_token',
-		refreshToken: 'any_refresh_token',
 	}
 }
 
@@ -56,6 +43,7 @@ describe('Authentication', () => {
 		const { httpPostClientSpy, authenticationSut } = makeSut()
 		httpPostClientSpy.response = {
 			statusCode: HttpStatusCode.UNAUTHORIZED,
+			body: {} as AccountModel,
 		}
 		const promise = authenticationSut.auth(mockAuthenticationBody())
 		await expect(promise).rejects.toThrowError(new InvalidCredentialsError())
@@ -65,6 +53,7 @@ describe('Authentication', () => {
 		const { httpPostClientSpy, authenticationSut } = makeSut()
 		httpPostClientSpy.response = {
 			statusCode: HttpStatusCode.BAD_REQUEST,
+			body: {} as AccountModel,
 		}
 		const promise = authenticationSut.auth(mockAuthenticationBody())
 		await expect(promise).rejects.toThrowError(new UnexpectedError())
@@ -74,6 +63,7 @@ describe('Authentication', () => {
 		const { httpPostClientSpy, authenticationSut } = makeSut()
 		httpPostClientSpy.response = {
 			statusCode: HttpStatusCode.NOT_FOUND,
+			body: {} as AccountModel,
 		}
 		const promise = authenticationSut.auth(mockAuthenticationBody())
 		await expect(promise).rejects.toThrowError(new UnexpectedError())
@@ -83,6 +73,7 @@ describe('Authentication', () => {
 		const { httpPostClientSpy, authenticationSut } = makeSut()
 		httpPostClientSpy.response = {
 			statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+			body: {} as AccountModel,
 		}
 		const promise = authenticationSut.auth(mockAuthenticationBody())
 		await expect(promise).rejects.toThrowError(new UnexpectedError())

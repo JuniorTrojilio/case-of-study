@@ -1,10 +1,6 @@
-// get version from package
-import pkg from '../../package.json'
-
-const VERSION = pkg.version
-
+import { version } from '../../package.json'
 function App() {
-	return <h1>{VERSION}</h1>
+	return <h1>{version}</h1>
 }
 
 export default App

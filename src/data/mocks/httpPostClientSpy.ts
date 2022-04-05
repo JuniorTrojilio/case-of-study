@@ -11,6 +11,7 @@ export default class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
 
 	response: HttpResponse<R> = {
 		statusCode: HttpStatusCode.OK,
+		body: {} as R,
 	}
 
 	async post({ url, body }: HttpPostType<T>): Promise<HttpResponse<R>> {
