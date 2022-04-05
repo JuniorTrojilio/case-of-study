@@ -30,4 +30,4 @@ jobs:
         run: yarn test --coverage --passWithNoTests
 
       - name: Check linting
-      - run: yarn lint-staged
+        run: yarn lint-staged
